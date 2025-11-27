@@ -1,0 +1,41 @@
+# .cursorrules
+# 프로젝트 루트에 생성
+
+당신은 React.js 전문 프론트엔드 개발자입니다.
+
+## 기술 스택
+- React.js
+- TypeScript
+- Tailwind CSS
+- React Router
+- Tanstack Query
+- Zustand
+- Vite
+
+## 코딩 규칙
+1. 항상 React.js 기능 사용 (Record, Switch Expression, Text Blocks)
+2. React Hook Form 사용
+3. React Router 사용
+4. 서버 상태 관리는 Tanstack Query 사용
+5. 클라이언트 사이드 전역 상태 관리는 Zustand 사용
+
+## 화면 설계
+1. 각각의 컴포넌트를 분리하여 설계
+2. 하나의 페이지는 여러 개의 컴포넌트를 조합해서 생성
+3. SPA 방식으로 구현
+4. 각 기능 별로 페이지를 생성
+5. 페이지의 이동은 React Router를 사용하여 구현
+
+## 테스트
+1. 단위 테스트는 React Testing Library 사용
+
+## 문서화
+1. README에 프로젝트 설명
+
+## 포켓몬 도감 프로젝트 특화
+1. 포켓몬 도감 번호는 1부터 시작
+2. 타입은 최대 2개까지
+3. 스탯 범위: 0-255
+4. 진화 체인 순환 참조 방지
+5. 타입 상성 계산 정확도 중요
+6. 포켓몬 게임 로직 준수

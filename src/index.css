@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  min-height: 100vh;
+}
+
+.pokemon-card {
+  @apply bg-gradient-to-br from-slate-800/90 to-slate-900/90 backdrop-blur-sm rounded-2xl border border-slate-700/50 shadow-xl transition-all duration-300;
+}
+
+.pokemon-card:hover {
+  @apply scale-105 shadow-2xl border-pokemon-yellow/50;
+}
+
+.type-badge {
+  @apply px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-md;
+}
+
+.stat-bar {
+  @apply h-3 rounded-full bg-gradient-to-r transition-all duration-500;
+}
+
