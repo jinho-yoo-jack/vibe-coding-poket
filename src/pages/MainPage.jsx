@@ -12,7 +12,10 @@ export default function MainPage() {
   }, [dispatch])
 
   const filteredList = searchQuery.trim()
-    ? list.filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    ? list.filter((p) => {
+        const q = searchQuery.toLowerCase()
+        return (p.name && p.name.toLowerCase().includes(q)) || (p.nameKo && p.nameKo.includes(searchQuery.trim()))
+      })
     : list
 
   if (loading) {

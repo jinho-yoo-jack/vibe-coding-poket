@@ -18,7 +18,7 @@ function getEvolutionChain(node) {
 export default function DetailPage() {
   const { id } = useParams()
   const dispatch = useDispatch()
-  const { currentDetail, detailLoading, favorites } = useSelector((state) => state.pokemon)
+  const { currentDetail, detailLoading, favorites, list } = useSelector((state) => state.pokemon)
 
   useEffect(() => {
     if (id) dispatch(loadPokemonDetail(id))
@@ -38,6 +38,7 @@ export default function DetailPage() {
   const { pokemon, species, evolutionChain } = currentDetail
   const mainType = pokemon.types[0]?.type.name ?? 'normal'
   const koreanName = species?.names?.find((n) => n.language.name === 'ko')?.name ?? pokemon.name
+  const getKoreanName = (pokeId) => list.find((p) => p.id === pokeId)?.nameKo ?? null
   const description =
     species?.flavor_text_entries?.find((e) => e.language.name === 'ko')?.flavor_text?.replace(/\n|\f/g, ' ') ?? ''
   const evolutions = evolutionChain ? getEvolutionChain(evolutionChain.chain) : []
@@ -69,8 +70,8 @@ export default function DetailPage() {
           </div>
           <div>
             <p className="text-slate-400 text-lg">{formatPokemonId(pokemon.id)}</p>
-            <h1 className="text-4xl font-bold text-white capitalize mb-2">{koreanName}</h1>
-            <p className="text-slate-400 capitalize mb-4">{pokemon.name}</p>
+            <h1 className="text-4xl font-bold text-white mb-2">{koreanName}</h1>
+            <p className="text-slate-400 text-sm mb-4">{pokemon.name}</p>
             <button
               type="button"
               onClick={() => dispatch(toggleFavorite(pokemon.id))}
@@ -141,10 +142,10 @@ export default function DetailPage() {
                   >
                     <img
                       src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${evo.id}.png`}
-                      alt={evo.name}
+                      alt={getKoreanName(evo.id) ?? evo.name}
                       className="w-20 h-20"
                     />
-                    <span className="text-white capitalize mt-2">{evo.name}</span>
+                    <span className="text-white mt-2">{getKoreanName(evo.id) ?? evo.name}</span>
                     <span className="text-slate-400 text-sm">{formatPokemonId(evo.id)}</span>
                   </Link>
                   {index < evolutions.length - 1 && (

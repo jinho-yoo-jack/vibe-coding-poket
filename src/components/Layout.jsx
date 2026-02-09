@@ -1,6 +1,10 @@
 import { Outlet, Link, NavLink } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setSearchQuery } from '../rtk/pokemonSlice'
 
 export default function Layout() {
+  const dispatch = useDispatch()
+
   return (
     <div className="min-h-screen">
       <header className="bg-gradient-to-r from-pokemon-red to-red-700 shadow-lg sticky top-0 z-50">
@@ -14,6 +18,7 @@ export default function Layout() {
           <nav className="flex gap-4">
             <NavLink
               to="/"
+              onClick={() => dispatch(setSearchQuery(''))}
               className={({ isActive }) =>
                 `text-white font-medium ${isActive ? 'underline' : 'hover:opacity-90'}`
               }

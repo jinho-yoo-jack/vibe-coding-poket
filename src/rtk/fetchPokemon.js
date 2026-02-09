@@ -19,9 +19,12 @@ async function fetchOnePokemon(id) {
     species.flavor_text_entries?.find((e) => e.language.name === 'en')
   const description = descriptionEntry?.flavor_text?.replace(/\n|\f/g, ' ') ?? ''
 
+  const nameKo = species.names?.find((n) => n.language.name === 'ko')?.name ?? pokemon.name
+
   return {
     id: pokemon.id,
     name: pokemon.name,
+    nameKo,
     front_default: pokemon.sprites?.front_default ?? '',
     back_default: pokemon.sprites?.back_default ?? '',
     description,
