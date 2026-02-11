@@ -1,9 +1,10 @@
-import { useSelector } from 'react-redux'
+import { FC } from 'react'
+import { useAppSelector } from '../store'
 import { Link } from 'react-router-dom'
 import PokemonCard from '../components/PokemonCard'
 
-export default function FavoritesPage() {
-  const { list, favorites } = useSelector((state) => state.pokemon)
+const FavoritesPage: FC = () => {
+  const { list, favorites } = useAppSelector((state) => state.pokemon)
   const favoriteList = list.filter((p) => favorites.includes(p.id))
 
   return (
@@ -26,3 +27,5 @@ export default function FavoritesPage() {
     </section>
   )
 }
+
+export default FavoritesPage

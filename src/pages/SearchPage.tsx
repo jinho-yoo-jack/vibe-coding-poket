@@ -1,16 +1,21 @@
-import { useForm } from 'react-hook-form'
+import { FC } from 'react'
+import { useForm, SubmitHandler } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '../store'
 import { setSearchQuery } from '../rtk/pokemonSlice'
 
-export default function SearchPage() {
+interface SearchFormInputs {
+  keyword: string
+}
+
+const SearchPage: FC = () => {
   const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const { register, handleSubmit } = useForm({
+  const dispatch = useAppDispatch()
+  const { register, handleSubmit } = useForm<SearchFormInputs>({
     defaultValues: { keyword: '' },
   })
 
-  const onSubmit = (data) => {
+  const onSubmit: SubmitHandler<SearchFormInputs> = (data) => {
     dispatch(setSearchQuery(data.keyword.trim()))
     navigate('/')
   }
@@ -45,3 +50,5 @@ export default function SearchPage() {
     </section>
   )
 }
+
+export default SearchPage

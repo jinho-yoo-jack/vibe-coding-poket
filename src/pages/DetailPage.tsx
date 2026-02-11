@@ -1,13 +1,14 @@
-import { useEffect } from 'react'
+import { useEffect, FC } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import { useAppDispatch, useAppSelector } from '../store'
 import { loadPokemonDetail, toggleFavorite, clearCurrentDetail } from '../rtk/pokemonSlice'
-import { TYPE_COLORS, TYPE_KOREAN, formatPokemonId, getPokemonIdFromUrl } from '../utils/pokemon'
+import { TYPE_COLORS, TYPE_KOREAN, formatPokemonId, getPokemonIdFromUrl, PokemonTypeName, PokemonStatName } from '../utils/pokemon'
+import { EvolutionNode } from '../types/pokemon'
 import StatBar from '../components/StatBar'
 
-function getEvolutionChain(node) {
-  const result = []
-  function traverse(n) {
+function getEvolutionChain(node: EvolutionNode) {
+  const result: Array<{ name: string; id: number }> = []
+  function traverse(n: EvolutionNode) {
     result.push({ name: n.species.name, id: getPokemonIdFromUrl(n.species.url) })
     n.evolves_to.forEach(traverse)
   }
@@ -15,10 +16,10 @@ function getEvolutionChain(node) {
   return result
 }
 
-export default function DetailPage() {
-  const { id } = useParams()
-  const dispatch = useDispatch()
-  const { currentDetail, detailLoading, favorites, list } = useSelector((state) => state.pokemon)
+const DetailPage: FC = () => {
+  const { id } = useParams<{ id: string }>()
+  const dispatch = useAppDispatch()
+  const { currentDetail, detailLoading, favorites, list } = useAppSelector((state) => state.pokemon)
 
   useEffect(() => {
     if (id) dispatch(loadPokemonDetail(id))
@@ -36,9 +37,9 @@ export default function DetailPage() {
   }
 
   const { pokemon, species, evolutionChain } = currentDetail
-  const mainType = pokemon.types[0]?.type.name ?? 'normal'
+  const mainType = (pokemon.types[0]?.type.name ?? 'normal') as PokemonTypeName
   const koreanName = species?.names?.find((n) => n.language.name === 'ko')?.name ?? pokemon.name
-  const getKoreanName = (pokeId) => list.find((p) => p.id === pokeId)?.nameKo ?? null
+  const getKoreanName = (pokeId: number) => list.find((p) => p.id === pokeId)?.nameKo ?? null
   const description =
     species?.flavor_text_entries?.find((e) => e.language.name === 'ko')?.flavor_text?.replace(/\n|\f/g, ' ') ?? ''
   const evolutions = evolutionChain ? getEvolutionChain(evolutionChain.chain) : []
@@ -82,14 +83,17 @@ export default function DetailPage() {
               {isFavorite ? '♥ 찜 해제' : '♡ 찜하기'}
             </button>
             <div className="flex gap-2 mb-6">
-              {pokemon.types.map((t) => (
-                <span
-                  key={t.type.name}
-                  className={`type-badge ${TYPE_COLORS[t.type.name]} text-white text-sm`}
-                >
-                  {TYPE_KOREAN[t.type.name] ?? t.type.name}
-                </span>
-              ))}
+              {pokemon.types.map((t) => {
+                const typeName = t.type.name as PokemonTypeName
+                return (
+                  <span
+                    key={t.type.name}
+                    className={`type-badge ${TYPE_COLORS[typeName]} text-white text-sm`}
+                  >
+                    {TYPE_KOREAN[typeName] ?? t.type.name}
+                  </span>
+                )
+              })}
             </div>
             {description && <p className="text-slate-300 mb-6 leading-relaxed">{description}</p>}
             <div className="grid grid-cols-2 gap-4 mb-6">
@@ -124,7 +128,7 @@ export default function DetailPage() {
           <h3 className="text-white font-bold text-xl mb-4">기본 스탯</h3>
           <div className="space-y-3">
             {pokemon.stats.map((stat) => (
-              <StatBar key={stat.stat.name} name={stat.stat.name} value={Math.min(255, Math.max(0, stat.base_stat))} />
+              <StatBar key={stat.stat.name} name={stat.stat.name as PokemonStatName} value={Math.min(255, Math.max(0, stat.base_stat))} />
             ))}
           </div>
         </div>
@@ -162,3 +166,5 @@ export default function DetailPage() {
     </div>
   )
 }
+
+export default DetailPage

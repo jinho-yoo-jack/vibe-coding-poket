@@ -1,7 +1,13 @@
+import { FC } from 'react'
 import { Link } from 'react-router-dom'
+import { Pokemon } from '../types/pokemon'
 import { formatPokemonId } from '../utils/pokemon'
 
-export default function PokemonCard({ pokemon }) {
+interface PokemonCardProps {
+  pokemon: Pokemon
+}
+
+const PokemonCard: FC<PokemonCardProps> = ({ pokemon }) => {
   const imageUrl =
     pokemon.front_default ||
     `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`
@@ -23,3 +29,5 @@ export default function PokemonCard({ pokemon }) {
     </Link>
   )
 }
+
+export default PokemonCard
