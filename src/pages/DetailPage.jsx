@@ -1,14 +1,13 @@
-import { useEffect, FC } from 'react'
+import { useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { useAppDispatch, useAppSelector } from '../store'
+import { useDispatch, useSelector } from 'react-redux'
 import { loadPokemonDetail, toggleFavorite, clearCurrentDetail } from '../rtk/pokemonSlice'
-import { TYPE_COLORS, TYPE_KOREAN, formatPokemonId, getPokemonIdFromUrl, PokemonTypeName, PokemonStatName } from '../utils/pokemon'
-import { EvolutionNode } from '../types/pokemon'
+import { TYPE_COLORS, TYPE_KOREAN, formatPokemonId, getPokemonIdFromUrl } from '../utils/pokemon'
 import StatBar from '../components/StatBar'
 
-function getEvolutionChain(node: EvolutionNode) {
-  const result: Array<{ name: string; id: number }> = []
-  function traverse(n: EvolutionNode) {
+function getEvolutionChain(node) {
+  const result = []
+  function traverse(n) {
     result.push({ name: n.species.name, id: getPokemonIdFromUrl(n.species.url) })
     n.evolves_to.forEach(traverse)
   }
@@ -16,10 +15,10 @@ function getEvolutionChain(node: EvolutionNode) {
   return result
 }
 
-const DetailPage: FC = () => {
-  const { id } = useParams<{ id: string }>()
-  const dispatch = useAppDispatch()
-  const { currentDetail, detailLoading, favorites, list } = useAppSelector((state) => state.pokemon)
+export default function DetailPage() {
+  const { id } = useParams()
+  const dispatch = useDispatch()
+  const { currentDetail, detailLoading, favorites, list } = useSelector((state) => state.pokemon)
 
   useEffect(() => {
     if (id) dispatch(loadPokemonDetail(id))
@@ -37,9 +36,9 @@ const DetailPage: FC = () => {
   }
 
   const { pokemon, species, evolutionChain } = currentDetail
-  const mainType = (pokemon.types[0]?.type.name ?? 'normal') as PokemonTypeName
+  const mainType = pokemon.types[0]?.type.name ?? 'normal'
   const koreanName = species?.names?.find((n) => n.language.name === 'ko')?.name ?? pokemon.name
-  const getKoreanName = (pokeId: number) => list.find((p) => p.id === pokeId)?.nameKo ?? null
+  const getKoreanName = (pokeId) => list.find((p) => p.id === pokeId)?.nameKo ?? null
   const description =
     species?.flavor_text_entries?.find((e) => e.language.name === 'ko')?.flavor_text?.replace(/\n|\f/g, ' ') ?? ''
   const evolutions = evolutionChain ? getEvolutionChain(evolutionChain.chain) : []
@@ -83,17 +82,14 @@ const DetailPage: FC = () => {
               {isFavorite ? '♥ 찜 해제' : '♡ 찜하기'}
             </button>
             <div className="flex gap-2 mb-6">
-              {pokemon.types.map((t) => {
-                const typeName = t.type.name as PokemonTypeName
-                return (
-                  <span
-                    key={t.type.name}
-                    className={`type-badge ${TYPE_COLORS[typeName]} text-white text-sm`}
-                  >
-                    {TYPE_KOREAN[typeName] ?? t.type.name}
-                  </span>
-                )
-              })}
+              {pokemon.types.map((t) => (
+                <span
+                  key={t.type.name}
+                  className={`type-badge ${TYPE_COLORS[t.type.name]} text-white text-sm`}
+                >
+                  {TYPE_KOREAN[t.type.name] ?? t.type.name}
+                </span>
+              ))}
             </div>
             {description && <p className="text-slate-300 mb-6 leading-relaxed">{description}</p>}
             <div className="grid grid-cols-2 gap-4 mb-6">
@@ -128,7 +124,7 @@ const DetailPage: FC = () => {
           <h3 className="text-white font-bold text-xl mb-4">기본 스탯</h3>
           <div className="space-y-3">
             {pokemon.stats.map((stat) => (
-              <StatBar key={stat.stat.name} name={stat.stat.name as PokemonStatName} value={Math.min(255, Math.max(0, stat.base_stat))} />
+              <StatBar key={stat.stat.name} name={stat.stat.name} value={Math.min(255, Math.max(0, stat.base_stat))} />
             ))}
           </div>
         </div>
@@ -166,5 +162,3 @@ const DetailPage: FC = () => {
     </div>
   )
 }
-
-export default DetailPage

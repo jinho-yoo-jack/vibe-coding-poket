@@ -1,9 +1,9 @@
 import { Outlet, Link, NavLink } from 'react-router-dom'
-import { useAppDispatch } from '../store'
+import { useDispatch } from 'react-redux'
 import { setSearchQuery } from '../rtk/pokemonSlice'
 
 export default function Layout() {
-  const dispatch = useAppDispatch()
+  const dispatch = useDispatch()
 
   return (
     <div className="min-h-screen">

@@ -1,12 +1,6 @@
-import { FC } from 'react'
-import { STAT_COLORS, STAT_KOREAN, PokemonStatName } from '../utils/pokemon'
+import { STAT_COLORS, STAT_KOREAN } from '../utils/pokemon'
 
-interface StatBarProps {
-  name: PokemonStatName
-  value: number
-}
-
-const StatBar: FC<StatBarProps> = ({ name, value }) => {
+export default function StatBar({ name, value }) {
   const percentage = Math.min((value / 255) * 100, 100)
 
   return (
@@ -24,5 +18,3 @@ const StatBar: FC<StatBarProps> = ({ name, value }) => {
     </div>
   )
 }
-
-export default StatBar

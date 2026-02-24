@@ -1,11 +1,11 @@
-import { useEffect, FC } from 'react'
-import { useAppDispatch, useAppSelector } from '../store'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { loadAllPokemon } from '../rtk/pokemonSlice'
 import PokemonCard from '../components/PokemonCard'
 
-const MainPage: FC = () => {
-  const dispatch = useAppDispatch()
-  const { list, loading, searchQuery } = useAppSelector((state) => state.pokemon)
+export default function MainPage() {
+  const dispatch = useDispatch()
+  const { list, loading, searchQuery } = useSelector((state) => state.pokemon)
 
   useEffect(() => {
     dispatch(loadAllPokemon())
@@ -41,5 +41,3 @@ const MainPage: FC = () => {
     </section>
   )
 }
-
-export default MainPage
